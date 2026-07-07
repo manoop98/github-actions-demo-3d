@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova 3D — GitHub Actions CI/CD Demo</title>
-  <meta name="description" content="A 3D animation website deployed to an Azure VM via GitHub Actions." />
+
+  <title>Manoop DevOps Lab | GitHub Actions CI/CD</title>
+
+  <meta
+    name="description"
+    content="A modern 3D website automatically deployed from GitHub to an Azure Ubuntu VM using GitHub Actions CI/CD."
+  />
+
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Three.js is vendored locally in /vendor (no CDN, no build step, works offline) -->
+  <!-- Three.js -->
   <script type="importmap">
   {
     "imports": {
@@ -17,32 +23,75 @@
   }
   </script>
 </head>
+
 <body>
-  <!-- The 3D scene renders into this canvas container -->
+
+  <!-- 3D Scene -->
   <div id="scene-container"></div>
 
-  <!-- Overlay UI -->
+  <!-- Top Navigation -->
   <header class="topbar">
-    <span class="logo">◆ NOVA<span class="logo-thin">3D</span></span>
-    <span class="badge" id="deploy-badge">deployed via GitHub Actions</span>
+    <span class="logo">
+      ◆ MANOOP
+      <span class="logo-thin">DEVOPS</span>
+    </span>
+
+    <span class="badge" id="deploy-badge">
+      🚀 Deployed Automatically using GitHub Actions
+    </span>
   </header>
 
+  <!-- Hero Section -->
   <main class="hero">
-    <h1>Interactive <span class="accent">3D</span> on the Web</h1>
-    <p>A Three.js scene served by Nginx on an Azure VM — shipped automatically on every <code>git push</code>.</p>
+
+    <h1>
+      Welcome to
+      <span class="accent">Manoop DevOps Lab</span>
+    </h1>
+
+    <p>
+      A modern 3D demonstration website hosted on an
+      <strong>Azure Ubuntu Virtual Machine</strong>
+      and automatically deployed through a complete
+      <strong>GitHub Actions CI/CD Pipeline</strong>.
+    </p>
+
     <div class="controls">
-      <button id="btn-color">Change Color</button>
-      <button id="btn-shape">Next Shape</button>
-      <button id="btn-spin">Toggle Spin</button>
+
+      <button id="btn-color">
+        🎨 Change Color
+      </button>
+
+      <button id="btn-shape">
+        🔷 Next Shape
+      </button>
+
+      <button id="btn-spin">
+        ⚡ Toggle Spin
+      </button>
+
     </div>
-    <p class="hint">Drag to orbit · scroll to zoom</p>
+
+    <p class="hint">
+      Azure VM • Ubuntu • Nginx • GitHub Actions • Three.js • CI/CD Pipeline
+    </p>
+
   </main>
 
+  <!-- Footer -->
   <footer class="footer">
-    <span id="build-info">build: local</span>
-    <span>Nova 3D · CI/CD demo</span>
+
+    <span id="build-info">
+      Build: GitHub Actions Deployment
+    </span>
+
+    <span>
+      Created by Manoop Madhu | Cloud & DevOps Engineer
+    </span>
+
   </footer>
 
   <script type="module" src="js/main.js"></script>
+
 </body>
 </html>
