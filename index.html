@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova 3D — GitHub Actions CI/CD Demo</title>
+  <meta name="description" content="A 3D animation website deployed to an Azure VM via GitHub Actions." />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Three.js is vendored locally in /vendor (no CDN, no build step, works offline) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- The 3D scene renders into this canvas container -->
+  <div id="scene-container"></div>
+
+  <!-- Overlay UI -->
+  <header class="topbar">
+    <span class="logo">◆ NOVA<span class="logo-thin">3D</span></span>
+    <span class="badge" id="deploy-badge">deployed via GitHub Actions</span>
+  </header>
+
+  <main class="hero">
+    <h1>Interactive <span class="accent">3D</span> on the Web</h1>
+    <p>A Three.js scene served by Nginx on an Azure VM — shipped automatically on every <code>git push</code>.</p>
+    <div class="controls">
+      <button id="btn-color">Change Color</button>
+      <button id="btn-shape">Next Shape</button>
+      <button id="btn-spin">Toggle Spin</button>
+    </div>
+    <p class="hint">Drag to orbit · scroll to zoom</p>
+  </main>
+
+  <footer class="footer">
+    <span id="build-info">build: local</span>
+    <span>Nova 3D · CI/CD demo</span>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

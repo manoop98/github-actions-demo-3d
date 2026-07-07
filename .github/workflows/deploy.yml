@@ -1,0 +1,71 @@
+name: Deploy 3D Site to Azure VM
+
+# WHEN this runs
+on:
+  push:
+    branches: [main]        # deploy on every push to main
+  pull_request:
+    branches: [main]        # but only validate on PRs (no deploy)
+  workflow_dispatch:         # allow manual runs from the Actions tab
+
+jobs:
+  # ---------------------------------------------------------------
+  # JOB 1 — Validate the site (runs for pushes AND pull requests)
+  # ---------------------------------------------------------------
+  validate:
+    name: Validate site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check required files exist
+        run: |
+          test -f index.html   || { echo "❌ index.html missing"; exit 1; }
+          test -f css/style.css || { echo "❌ css/style.css missing"; exit 1; }
+          test -f js/main.js    || { echo "❌ js/main.js missing"; exit 1; }
+          test -f vendor/three/three.module.js || { echo "❌ three.module.js missing"; exit 1; }
+          echo "✅ All required files present"
+
+      - name: Validate HTML with tidy
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y tidy -qq
+          # -q quiet, -e show only errors; we don't fail on warnings
+          tidy -q -e index.html || echo "⚠️  tidy reported warnings (non-blocking)"
+          echo "✅ HTML checked"
+
+  # ---------------------------------------------------------------
+  # JOB 2 — Deploy to the Azure VM (only on push to main)
+  # ---------------------------------------------------------------
+  deploy:
+    name: Deploy to VM
+    needs: validate                                   # wait for validate to pass
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create build info file
+        run: |
+          echo "{\"commit\": \"${{ github.sha }}\", \"date\": \"$(date -u +%Y-%m-%d)\"}" > build.json
+          cat build.json
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy with rsync
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='README.md' \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            ./ ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }}:/var/www/threed-demo/
+
+      - name: Done
+        run: echo "🚀 Deployed to http://${{ secrets.VM_HOST }}"
